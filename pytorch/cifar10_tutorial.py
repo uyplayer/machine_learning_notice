@@ -77,7 +77,8 @@ images, labels = dataiter.next()
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        # NetWork structure and the upper and lower order of these lines are nothong to do with calculation
+        # NetWork structure and the upper and lower order of these lines are nothong to do with calculation,
+        # these lines are definatiom of the fuctions
         self.conv1 = nn.Conv2d(3,6,5)
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(6, 16, 5)
