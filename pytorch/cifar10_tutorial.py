@@ -86,9 +86,11 @@ class Net(nn.Module):
         self.fc3 = nn.Linear(84, 10)
 
     def forward(self, x):
-        # calculate ;
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
+        # calculation is here , input image size : (32,32)
+        x = self.conv1(x) # (28, 28)
+        x = self.pool(F.relu(x)) # (14, 14)
+        x = self.conv2(x) # (10, 10)
+        x = self.pool(F.relu(x)) # (5, 5)
         x = x.view(-1, 16 * 5 * 5)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
