@@ -18,6 +18,7 @@ from torchsummary import summary # model summary
 # numirical
 import matplotlib.pyplot as plt
 import numpy as np
+import torch.optim as optim
 
 # to normalize image data
 '''
@@ -67,7 +68,7 @@ def imshow(img):
 # get some random training images
 dataiter = iter(trainloader) #
 images, labels = dataiter.next()
-
+print(labels)
 # # show images
 # imshow(torchvision.utils.make_grid(images)) # Make a grid of images
 # # print labels
@@ -98,11 +99,78 @@ class Net(nn.Module):
         x = self.fc3(x)
         return x
 
-# init model
+# # init model
 net = Net()
-# output the model architecture
-# image 32*32
+# # output the model architecture
+# # image 32*32
 summary(net, (3, 32, 32))
+
+#  Cross-Entropy loss and SGD with momentum
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(net.parameters(),lr = 0.001,momentum=0.9)
+
+# Train the network
+for epoch in range(2):
+    running_loss = 0.0
+    for i,data in enumerate(trainloader,0):
+        # get the inputs; data is a list of [inputs, labels]
+        inputs, labels = data
+        # zero the parameter gradients
+        optimizer.zero_grad()
+        # calculate
+        outputs = net(inputs)
+        # loss
+        loss = criterion(outputs,labels)
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item()
+
+        if i % 2000 == 1999:
+            print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / 2000))
+            running_loss = 0.0
+
+        print('Finished Training')
+
+# save model
+path = "./models/cifar_net.pth"
+torch.save(net.state_dict(),path)
+
+# load model
+net = Net()
+net.load_state_dict(torch.load(path))
+
+# test
+dataiter = iter(testloader)
+images,labels = dataiter.next()
+
+# predict
+outputs = net(images)
+_, predicted = torch.max(outputs,1) # torch.max returns the max values's index
+print(predicted)
+print('Predicted: ', ' '.join('%5s' % classes[predicted[j]] for j in range(4)))
+
+# network performs on the whole dataset
+correct = 0
+total = 0
+with torch.no_grad():
+    for data in testloader:
+        images,labels = data
+        outputs = net(images)
+        print(" outputs :",outputs)
+        print(" outputs.data : ",outputs.data)
+        exit()
+        _, predicted = torch.max(outputs.data,1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum.item()
+print('Accuracy of the network on the 10000 test images: %d %%' % (100 * correct / total))
+
+
+
+
+
+
+
 
 
 
