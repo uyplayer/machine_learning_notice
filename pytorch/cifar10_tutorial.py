@@ -165,9 +165,31 @@ with torch.no_grad():
         correct += (predicted == labels).sum.item()
 print('Accuracy of the network on the 10000 test images: %d %%' % (100 * correct / total))
 
+# the classes that performed well, and the classes that did not perform well
+class_correct = list(0. for i in range(10))
+class_total = list(0. for i in range(10))
+with torch.no_grad():
+    for data in testloader:
+        images, labels = data
+        outputs = net(images)
+        _, predicted = torch.max(outputs, 1)
+        c = (predicted == labels).squeeze()
+        for i in range(4):
+            label = labels[i]
+            class_correct[label] += c[i].item()
+            class_total[label] += 1
 
 
+for i in range(10):
+    print('Accuracy of %5s : %2d %%' % (classes[i], 100 * class_correct[i] / class_total[i]))
 
+# training on GPU
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(device)
+
+net.to(device)
+
+inputs,labels = data[0].to(device),data[1].to(device)
 
 
 
