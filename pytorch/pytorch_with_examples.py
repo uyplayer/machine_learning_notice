@@ -25,7 +25,7 @@ learning_rate = 1e-6
 for t in range(500):
     # Forward pass: compute predicted y
     h = x.dot(w1) # (64,1000)*(1000,100) = (64,100)
-    h_relu = np.maximum(h,0) # if an element in array is small than 0 ; then 0 replace this element
+    h_relu = np.maximum(h,0) # if an element in array is small than 0 ; then 0 replaces this element
     y_pred = h_relu.dot(w2) # (64,100)*(100,10) = (64,10)
 
     #loss
