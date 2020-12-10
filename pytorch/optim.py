@@ -6,6 +6,8 @@
 # @File    : optim.py
 # @Software: PyCharm
 
+# https://pytorch.org/tutorials/beginner/pytorch_with_examples.html#pytorch-optim
+
 # dependency library
 # pytorch
 import torch
