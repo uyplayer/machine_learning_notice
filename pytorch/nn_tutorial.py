@@ -59,4 +59,7 @@ train_ds = TensorDataset(x_train,y_train)
 train_dl = DataLoader(train_ds, batch_size=bs)
 
 for xb,yb in train_dl:
-    pass
+    # pass
+    print(xb.shape)
+    print(yb.shape)
+    exit()
